@@ -8,3 +8,4 @@ To use:
 * run ./cleanBuildRun.sh
 * The container will start and ask you to set the password for the storageuser
 * By default the access username is "storageuser" and the share is "Storage"
+* Use ctrl+P Q to background the container, typing exit will stop it
