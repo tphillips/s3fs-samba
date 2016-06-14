@@ -1,0 +1,11 @@
+
+[Storage]
+path = /mnt/s3fs-data
+read only = no
+browsable = yes
+guest ok = no
+public = no
+writable = yes
+create mask = 777
+directory mask = 777
+valid users = storageuser
