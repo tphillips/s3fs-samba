@@ -1,1 +1,0 @@
-s3fs#YOURBUCKETNAME /mnt/s3fs-data fuse storage_class=reduced_redundancy,allow_other,rw,umask=000,use_cache=/mnt/s3fs-tmp 0 0

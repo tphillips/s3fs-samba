@@ -8,4 +8,4 @@ public = no
 writable = yes
 create mask = 777
 directory mask = 777
-valid users = storageuser
+valid users = 
