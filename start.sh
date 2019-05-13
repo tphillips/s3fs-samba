@@ -1,15 +1,26 @@
 echo "$AWSKEY:$AWSSECRET" >> /etc/passwd-s3fs
 chmod 600 /etc/passwd-s3fs
-echo "s3fs#$BUCKET /mnt/s3fs-data fuse storage_class=reduced_redundancy,allow_other,rw,umask=000,use_cache=/mnt/s3fs-tmp 0 0" > etc/fstab
 useradd -ms /bin/bash $SMBUSER
-mkdir /mnt/s3fs-data; 
-mkdir /mnt/s3fs-tmp; 
-chmod -R 777 /mnt/s3fs-tmp; 
-chown -R $SMBUSER /mnt/s3fs-data
 (echo $SMBPASS; echo $SMBPASS) | smbpasswd -a -s $SMBUSER
-echo "$SMBUSER" >> /etc/samba/smb.conf
-mount /mnt/s3fs-data
-service smbd start
-tail -f /dev/null
+echo "" > /etc/samba/smb.conf
 
+echo Buckets are $BUCKET
+for B in $BUCKET; do
+	echo "Configuring folders for $B"
+	mkdir /mnt/s3fs-$B; 
+	mkdir /mnt/s3fs-$B-tmp; 
+	chmod -R 777 /mnt/s3fs-$B-tmp; 
+	chown -R $SMBUSER /mnt/s3fs-$B
+	sed "s/_BUCKET_/$B/g" /etc/samba/smb.conf.template >> /etc/samba/smb.conf
+done
+
+echo "$SMBUSER" >> /etc/samba/smb.conf
+service smbd start
+
+for B in $BUCKET; do
+	echo "Starting s3fs for $B"
+	s3fs $B /mnt/s3fs-$B -o storage_class=reduced_redundancy,allow_other,rw,umask=000,noatime,use_cache=/mnt/s3fs-$B-tmp,dbglevel=warn
+done
+
+tail /dev/null -f
 

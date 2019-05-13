@@ -1,6 +1,6 @@
 
-[Storage]
-path = /mnt/s3fs-data
+[_BUCKET_]
+path = /mnt/s3fs-_BUCKET_
 read only = no
 browsable = yes
 guest ok = no
