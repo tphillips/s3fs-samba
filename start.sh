@@ -19,7 +19,7 @@ service smbd start
 
 for B in $BUCKET; do
 	echo "Starting s3fs for $B"
-	s3fs $B /mnt/s3fs-$B -o storage_class=reduced_redundancy,allow_other,rw,umask=000,noatime,use_cache=/mnt/s3fs-$B-tmp,dbglevel=warn
+	s3fs $B /mnt/s3fs-$B -o storage_class=reduced_redundancy,allow_other,rw,umask=000,noatime,use_cache=/mnt/s3fs-$B-tmp,dbglevel=warn -f > /var/log/s3fs-$B.log.txt &
 done
 
 tail /dev/null -f
